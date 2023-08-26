@@ -1,3 +1,4 @@
+//git커밋
 import Game from "./component/Game";
 function App() {
   return (
