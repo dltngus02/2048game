@@ -40,7 +40,8 @@ export const CLICK_TOP = "CLICK_TOP";
 export const CLICK_BOTTOM = "CLICK_BOTTOM";
 export const START_GAME = "START_GAME";
 export const LOCATION_COPY = "LOCATION_COPY";
-export const ADD_NUMBER = "ADD_NUMBER";
+export const SUM_LEFT = "SUM_LEFT";
+export const SUM_RIGHT = "SUM_RIGHT";
 const reducer = (state, action) => {
   switch (action.type) {
     case START_GAME:
@@ -160,7 +161,54 @@ const reducer = (state, action) => {
         ...state,
         tableData: tableDataBottom,
       };
-    case ADD_NUMBER:
+    case SUM_LEFT:
+      var x, y;
+
+      const tableDataSumLeft = [...state.tableData];
+
+      for (y = 0; y <= 3; y++) {
+        for (x = 0; x < 3; x++) {
+          if (
+            tableDataSumLeft[y][x] !== "" &&
+            tableDataSumLeft[y][x] === tableDataSumLeft[y][x + 1]
+          ) {
+            console.log(x, y);
+            tableDataSumLeft[y][x] *= 2;
+            for (var tmpx = x + 2; tmpx < 3; tmpx++) {
+              tableDataSumLeft[y][tmpx - 1] = tableDataSumLeft[y][tmpx];
+            }
+            tableDataSumLeft[y][3] = "";
+          }
+        }
+      }
+
+      return {
+        ...state,
+        tableData: tableDataSumLeft,
+      };
+    case SUM_RIGHT:
+      var x, y;
+
+      const tableDataSumRight = [...state.tableData];
+      for (y = 0; y <= 3; y++) {
+        for (x = 3; x > 0; x--) {
+          if (
+            tableDataSumRight[y][x] !== "" &&
+            tableDataSumRight[y][x] === tableDataSumRight[y][x - 1]
+          ) {
+            tableDataSumRight[y][x] *= 2;
+            console.log(x);
+            for (var tmpx = x - 1; tmpx > 0; tmpx--) {
+              tableDataSumRight[y][tmpx] = tableDataSumRight[y][tmpx - 1];
+            }
+            tableDataSumRight[y][0] = "";
+          }
+        }
+      }
+      return {
+        ...state,
+        tableData: tableDataSumRight,
+      };
   }
 };
 const Game = () => {
@@ -168,8 +216,17 @@ const Game = () => {
   const tableDataCheck = [].concat(state.tableData);
 
   const canMoveLeft = () => {
+    console.log(tableDataCheck);
+    //왼쪽으로 움직일 수 있는지 체크하는 함수
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+        if (
+          tableDataCheck[y][x] !== "" &&
+          x != 3 &&
+          tableDataCheck[y][x] === tableDataCheck[y][x + 1]
+        ) {
+          return true;
+        }
         if (tableDataCheck[y][x] !== "") {
           for (let leftx = 0; leftx < x; leftx++) {
             if (tableDataCheck[y][leftx] === "") {
@@ -185,6 +242,13 @@ const Game = () => {
   const canMoveRight = () => {
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+        if (
+          tableDataCheck[y][x] !== "" &&
+          x != 3 &&
+          tableDataCheck[y][x] === tableDataCheck[y][x + 1]
+        ) {
+          return true;
+        }
         if (tableDataCheck[y][x] !== "") {
           for (let rightx = 3; rightx > x; rightx--) {
             if (tableDataCheck[y][rightx] === "") {
@@ -198,8 +262,12 @@ const Game = () => {
   };
 
   const canMoveUp = () => {
+    //위쪽으로 움직일 수 있는지 체크하는 함수
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[0][x] == tableDataCheck[1][x]) {
+          return true;
+        }
         if (tableDataCheck[y][x] !== "") {
           for (let upy = 0; upy < y; upy++) {
             if (tableDataCheck[upy][x] === "") {
@@ -212,8 +280,13 @@ const Game = () => {
     return false;
   };
   const canMoveDown = () => {
+    //아래쪽으로 움직일 수 있는지 체크하는 함수
+
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[2][x] == tableDataCheck[3][x]) {
+          return true;
+        }
         if (tableDataCheck[y][x] !== "") {
           for (let downy = 3; downy > y; downy--) {
             if (tableDataCheck[downy][x] === "") {
@@ -228,22 +301,26 @@ const Game = () => {
 
   useEffect(() => {
     if (state.start) {
+      //시작시 요소 두개 띄우기 위한 부분
       dispatch({ type: LOCATION_SELECT });
       dispatch({ type: LOCATION_SELECT });
       dispatch({ type: START_GAME });
     }
 
     const handleKeyDown = (e) => {
+      //키보드 이벤트 조작 부분
       if (e.key === "ArrowRight") {
         if (canMoveRight()) {
           console.log("오른쪽");
           dispatch({ type: CLICK_RIGHT });
+          dispatch({ type: SUM_RIGHT });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowLeft") {
         if (canMoveLeft()) {
           console.log("왼쪽");
           dispatch({ type: CLICK_LEFT });
+          dispatch({ type: SUM_LEFT });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowDown") {
@@ -267,9 +344,6 @@ const Game = () => {
     };
   }, [state.tableData]);
 
-  // useEffect(() => {
-  //   console.log("tableData 바뀜");
-  // }, [state.tableData]);
   return (
     <>
       <Table tableData={state.tableData} />
