@@ -1,4 +1,4 @@
-//git커밋
+//main으로 커밋
 import Game from "./component/Game";
 function App() {
   return (
