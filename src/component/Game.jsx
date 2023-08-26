@@ -42,6 +42,8 @@ export const START_GAME = "START_GAME";
 export const LOCATION_COPY = "LOCATION_COPY";
 export const SUM_LEFT = "SUM_LEFT";
 export const SUM_RIGHT = "SUM_RIGHT";
+export const SUM_UP = "SUM_UP";
+export const SUM_DOWN = "SUM_DOWN";
 const reducer = (state, action) => {
   switch (action.type) {
     case START_GAME:
@@ -209,6 +211,51 @@ const reducer = (state, action) => {
         ...state,
         tableData: tableDataSumRight,
       };
+    case SUM_UP:
+      var x, y;
+
+      const tableDataSumUp = [...state.tableData];
+      for (x = 0; x <= 3; x++) {
+        for (y = 0; y < 3; y++) {
+          if (
+            tableDataSumUp[y][x] !== "" &&
+            tableDataSumUp[y][x] === tableDataSumUp[y + 1][x]
+          ) {
+            tableDataSumUp[y][x] *= 2;
+            for (var tmpy = y + 1; tmpx < 3; tmpy++) {
+              tableDataSumUp[tmpy][x] = tableDataSumUp[tmpy + 1][x];
+            }
+            tableDataSumUp[3][x] = "";
+          }
+        }
+      }
+      return {
+        ...state,
+        tableData: tableDataSumUp,
+      };
+    case SUM_DOWN:
+      var x, y;
+
+      const tableDataSumDown = [...state.tableData];
+      for (x = 0; x <= 3; x++) {
+        for (y = 3; y > 0; y--) {
+          if (
+            tableDataSumDown[y][x] !== "" &&
+            tableDataSumDown[y][x] === tableDataSumDown[y - 1][x]
+          ) {
+            tableDataSumDown[y][x] *= 2;
+
+            for (var tmpy = y - 1; tmpy > 0; tmpy--) {
+              tableDataSumDown[tmpy][x] = tableDataSumDown[tmpy - 1][x];
+            }
+            tableDataSumDown[0][x] = "";
+          }
+        }
+      }
+      return {
+        ...state,
+        tableData: tableDataSumDown,
+      };
   }
 };
 const Game = () => {
@@ -265,7 +312,11 @@ const Game = () => {
     //위쪽으로 움직일 수 있는지 체크하는 함수
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
-        if (tableDataCheck[0][x] == tableDataCheck[1][x]) {
+        if (
+          tableDataCheck[y][x] !== "" &&
+          y != 3 &&
+          tableDataCheck[y][x] === tableDataCheck[y + 1][x]
+        ) {
           return true;
         }
         if (tableDataCheck[y][x] !== "") {
@@ -284,6 +335,13 @@ const Game = () => {
 
     for (let y = 0; y < 4; y++) {
       for (let x = 0; x < 4; x++) {
+        if (
+          tableDataCheck[y][x] !== "" &&
+          y != 3 &&
+          tableDataCheck[y][x] === tableDataCheck[y + 1][x]
+        ) {
+          return true;
+        }
         if (tableDataCheck[2][x] == tableDataCheck[3][x]) {
           return true;
         }
@@ -327,12 +385,14 @@ const Game = () => {
         if (canMoveDown()) {
           console.log("아래");
           dispatch({ type: CLICK_BOTTOM });
+          dispatch({ type: SUM_DOWN });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowUp") {
         if (canMoveUp()) {
           console.log("위");
           dispatch({ type: CLICK_TOP });
+          dispatch({ type: SUM_UP });
           dispatch({ type: LOCATION_SELECT });
         }
       }
