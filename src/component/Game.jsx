@@ -40,6 +40,7 @@ export const CLICK_TOP = "CLICK_TOP";
 export const CLICK_BOTTOM = "CLICK_BOTTOM";
 export const START_GAME = "START_GAME";
 export const LOCATION_COPY = "LOCATION_COPY";
+export const ADD_NUMBER = "ADD_NUMBER";
 const reducer = (state, action) => {
   switch (action.type) {
     case START_GAME:
@@ -71,7 +72,10 @@ const reducer = (state, action) => {
         x,
         y,
         change = false;
-      const tableDataRight = [...state.tableData];
+
+      let tableDataRight = [...state.tableData];
+      let tableDataTmp = [].concat(tableDataRight);
+
       for (y = 0; y < 4; y++) {
         for (x = 3; x >= 0; x--) {
           if (tableDataRight[y][x] != "") {
@@ -156,12 +160,71 @@ const reducer = (state, action) => {
         ...state,
         tableData: tableDataBottom,
       };
+    case ADD_NUMBER:
   }
 };
 const Game = () => {
   const [state, dispatch] = useReducer(reducer, initalState);
-  const [tmpData, setTmpData] = useState();
-  console.log(tmpData);
+  const tableDataCheck = [].concat(state.tableData);
+
+  const canMoveLeft = () => {
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[y][x] !== "") {
+          for (let leftx = 0; leftx < x; leftx++) {
+            if (tableDataCheck[y][leftx] === "") {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  const canMoveRight = () => {
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[y][x] !== "") {
+          for (let rightx = 3; rightx > x; rightx--) {
+            if (tableDataCheck[y][rightx] === "") {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  const canMoveUp = () => {
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[y][x] !== "") {
+          for (let upy = 0; upy < y; upy++) {
+            if (tableDataCheck[upy][x] === "") {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
+  const canMoveDown = () => {
+    for (let y = 0; y < 4; y++) {
+      for (let x = 0; x < 4; x++) {
+        if (tableDataCheck[y][x] !== "") {
+          for (let downy = 3; downy > y; downy--) {
+            if (tableDataCheck[downy][x] === "") {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  };
 
   useEffect(() => {
     if (state.start) {
@@ -169,27 +232,44 @@ const Game = () => {
       dispatch({ type: LOCATION_SELECT });
       dispatch({ type: START_GAME });
     }
+
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight") {
-        dispatch({ type: CLICK_RIGHT });
+        if (canMoveRight()) {
+          console.log("오른쪽");
+          dispatch({ type: CLICK_RIGHT });
+          dispatch({ type: LOCATION_SELECT });
+        }
       } else if (e.key === "ArrowLeft") {
-        dispatch({ type: CLICK_LEFT });
+        if (canMoveLeft()) {
+          console.log("왼쪽");
+          dispatch({ type: CLICK_LEFT });
+          dispatch({ type: LOCATION_SELECT });
+        }
       } else if (e.key === "ArrowDown") {
-        dispatch({ type: CLICK_BOTTOM });
+        if (canMoveDown()) {
+          console.log("아래");
+          dispatch({ type: CLICK_BOTTOM });
+          dispatch({ type: LOCATION_SELECT });
+        }
       } else if (e.key === "ArrowUp") {
-        dispatch({ type: CLICK_TOP });
+        if (canMoveUp()) {
+          console.log("위");
+          dispatch({ type: CLICK_TOP });
+          dispatch({ type: LOCATION_SELECT });
+        }
       }
     };
-    // if (!state.start) {
-    //   dispatch({ type: LOCATION_SELECT });
-    // }
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [state.tableDataTmp]);
+  }, [state.tableData]);
 
+  // useEffect(() => {
+  //   console.log("tableData 바뀜");
+  // }, [state.tableData]);
   return (
     <>
       <Table tableData={state.tableData} />
