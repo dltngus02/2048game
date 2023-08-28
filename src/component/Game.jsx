@@ -37,6 +37,7 @@ export const SUM_DOWN = "SUM_DOWN";
 export const SET_RESULT = "SET_RESULT";
 export const SET_TABLEDATA = "SET_TABLEDATA";
 export const RESET_GAME = "RESET_GAME";
+
 const reducer = (state, action) => {
   switch (action.type) {
     case RESET_GAME:
@@ -48,6 +49,7 @@ const reducer = (state, action) => {
           ["", "", "", ""],
           ["", "", "", ""],
         ],
+        result: 0,
         start: true,
       };
     case SET_TABLEDATA:
@@ -55,7 +57,11 @@ const reducer = (state, action) => {
         ...state,
         tableData: action.payload,
       };
-
+    case SET_RESULT:
+      return {
+        ...state,
+        result: Number(action.payload),
+      };
     case START_GAME:
       return {
         ...state,
@@ -110,7 +116,7 @@ const reducer = (state, action) => {
 
     case CLICK_LEFT:
       var i, x, y;
-      change = false;
+
       const tableDataLeft = [...state.tableData];
       for (y = 0; y < 4; y++) {
         for (x = 0; x < 4; x++) {
@@ -119,7 +125,6 @@ const reducer = (state, action) => {
               if (tableDataLeft[y][i] == "") {
                 tableDataLeft[y][i] = tableDataLeft[y][x];
                 tableDataLeft[y][x] = "";
-                change = true;
               }
             }
           }
@@ -173,7 +178,9 @@ const reducer = (state, action) => {
         tableData: tableDataBottom,
       };
     case SUM_LEFT:
-      var x, y;
+      var x,
+        y,
+        resultLeft = 0;
 
       const tableDataSumLeft = [...state.tableData];
 
@@ -183,7 +190,7 @@ const reducer = (state, action) => {
             tableDataSumLeft[y][x] !== "" &&
             tableDataSumLeft[y][x] === tableDataSumLeft[y][x + 1]
           ) {
-            console.log(x, y);
+            resultLeft += tableDataSumLeft[y][x];
             tableDataSumLeft[y][x] *= 2;
 
             for (var tmpx = x; tmpx < 2; tmpx++) {
@@ -197,9 +204,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataSumLeft,
+        result: resultLeft + state.result,
       };
     case SUM_RIGHT:
-      var x, y;
+      var x,
+        y,
+        resultRight = 0;
 
       const tableDataSumRight = [...state.tableData];
       for (y = 0; y <= 3; y++) {
@@ -208,8 +218,8 @@ const reducer = (state, action) => {
             tableDataSumRight[y][x] !== "" &&
             tableDataSumRight[y][x] === tableDataSumRight[y][x - 1]
           ) {
+            resultRight += tableDataSumRight[y][x];
             tableDataSumRight[y][x] *= 2;
-            console.log(x);
             for (var tmpx = x - 1; tmpx > 0; tmpx--) {
               tableDataSumRight[y][tmpx] = tableDataSumRight[y][tmpx - 1];
             }
@@ -220,9 +230,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataSumRight,
+        result: state.result + resultRight,
       };
     case SUM_UP:
-      var x, y;
+      var x,
+        y,
+        resultUp = 0;
 
       const tableDataSumUp = [...state.tableData];
       for (x = 0; x <= 3; x++) {
@@ -231,8 +244,9 @@ const reducer = (state, action) => {
             tableDataSumUp[y][x] !== "" &&
             tableDataSumUp[y][x] === tableDataSumUp[y + 1][x]
           ) {
+            resultUp += tableDataSumUp[y][x];
             tableDataSumUp[y][x] *= 2;
-            for (var tmpy = y + 1; tmpx < 3; tmpy++) {
+            for (var tmpy = y + 1; tmpy < 3; tmpy++) {
               tableDataSumUp[tmpy][x] = tableDataSumUp[tmpy + 1][x];
             }
             tableDataSumUp[3][x] = "";
@@ -242,9 +256,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataSumUp,
+        result: resultUp + state.result,
       };
     case SUM_DOWN:
-      var x, y;
+      var x,
+        y,
+        resultDown = 0;
 
       const tableDataSumDown = [...state.tableData];
       for (x = 0; x <= 3; x++) {
@@ -253,6 +270,7 @@ const reducer = (state, action) => {
             tableDataSumDown[y][x] !== "" &&
             tableDataSumDown[y][x] === tableDataSumDown[y - 1][x]
           ) {
+            resultDown += tableDataSumDown[y][x];
             tableDataSumDown[y][x] *= 2;
 
             for (var tmpy = y - 1; tmpy > 0; tmpy--) {
@@ -265,6 +283,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataSumDown,
+        result: resultDown + state.result,
       };
     default:
       return state;
@@ -274,15 +293,15 @@ const Game = () => {
   const [state, dispatch] = useReducer(reducer, initalState);
   const tableDataCheck = [].concat(state.tableData);
 
-  console.log(readFromCookie("table"));
-  console.log(state.tableData);
   useEffect(() => {
     if (state.start) {
-      const cookieValue = readFromCookie("table");
-      const hasCookieValue = cookieValue !== undefined;
+      const tableCookieValue = readFromCookie("table");
+      const resultCookieValue = readFromCookie("result");
+      const hasCookieValue = tableCookieValue !== undefined;
       if (hasCookieValue) {
         console.log("쿠키있음");
-        dispatch({ type: SET_TABLEDATA, payload: cookieValue });
+        dispatch({ type: SET_TABLEDATA, payload: tableCookieValue });
+        dispatch({ type: SET_RESULT, payload: resultCookieValue });
       } else {
         console.log("쿠키없음");
         dispatch({ type: LOCATION_SELECT });
@@ -296,30 +315,27 @@ const Game = () => {
     const handleKeyDown = (e) => {
       //키보드 이벤트 조작 부분
       saveToCookie("table", state.tableData);
+      saveToCookie("result", state.result);
       if (e.key === "ArrowRight") {
         if (canMoveRight(tableDataCheck)) {
-          console.log("오른쪽");
           dispatch({ type: CLICK_RIGHT });
           dispatch({ type: SUM_RIGHT });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowLeft") {
         if (canMoveLeft(tableDataCheck)) {
-          console.log("왼쪽");
           dispatch({ type: CLICK_LEFT });
           dispatch({ type: SUM_LEFT });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowDown") {
         if (canMoveDown(tableDataCheck)) {
-          console.log("아래");
           dispatch({ type: CLICK_BOTTOM });
           dispatch({ type: SUM_DOWN });
           dispatch({ type: LOCATION_SELECT });
         }
       } else if (e.key === "ArrowUp") {
         if (canMoveUp(tableDataCheck)) {
-          console.log("위");
           dispatch({ type: CLICK_TOP });
           dispatch({ type: SUM_UP });
           dispatch({ type: LOCATION_SELECT });
@@ -335,6 +351,7 @@ const Game = () => {
 
   return (
     <>
+      <div>점수 : {state.result}</div>
       <Table tableData={state.tableData} />
       <ResetButton dispatch={dispatch}></ResetButton>
     </>
