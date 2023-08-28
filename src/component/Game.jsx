@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import Table from "./Table";
-import cookie from "react-cookies";
+
 import { saveToCookie, readFromCookie } from "./Cookies";
 import {
   canMoveLeft,
@@ -22,6 +22,7 @@ const initalState = {
   ],
 
   result: 0,
+  bestResult: 0,
 };
 export const LOCATION_SELECT = "LOCATION_SELECT";
 export const CLICK_RIGHT = "CLICK_RIGHT";
@@ -34,12 +35,31 @@ export const SUM_LEFT = "SUM_LEFT";
 export const SUM_RIGHT = "SUM_RIGHT";
 export const SUM_UP = "SUM_UP";
 export const SUM_DOWN = "SUM_DOWN";
-export const SET_RESULT = "SET_RESULT";
+
 export const SET_TABLEDATA = "SET_TABLEDATA";
 export const RESET_GAME = "RESET_GAME";
-
+export const BETTER_THAN_BEST = "BETTER_THAN_BEST";
 const reducer = (state, action) => {
   switch (action.type) {
+    case BETTER_THAN_BEST:
+      console.log(action.bestResultLoad);
+      console.log(state.result);
+      const betterThanBest = action.bestResultLoad < state.result;
+      console.log(action.bestResultLoad);
+      console.log(state.result);
+      console.log(betterThanBest);
+      if (betterThanBest) {
+        saveToCookie("bestResult", state.result);
+        return {
+          ...state,
+          bestResult: state.result,
+        };
+      } else {
+        return {
+          ...state,
+          bestResult: action.bestResultLoad,
+        };
+      }
     case RESET_GAME:
       return {
         ...state,
@@ -55,13 +75,11 @@ const reducer = (state, action) => {
     case SET_TABLEDATA:
       return {
         ...state,
-        tableData: action.payload,
+        tableData: action.tableLoad,
+        result: Number(action.resultLoad),
+        bestResult: Number(action.bestResultLoad),
       };
-    case SET_RESULT:
-      return {
-        ...state,
-        result: Number(action.payload),
-      };
+
     case START_GAME:
       return {
         ...state,
@@ -87,10 +105,7 @@ const reducer = (state, action) => {
       };
 
     case CLICK_RIGHT:
-      var i,
-        x,
-        y,
-        change = false;
+      var i, x, y;
 
       let tableDataRight = [...state.tableData];
 
@@ -101,7 +116,6 @@ const reducer = (state, action) => {
               if (tableDataRight[y][i] == "") {
                 tableDataRight[y][i] = tableDataRight[y][x];
                 tableDataRight[y][x] = "";
-                change = true;
               }
             }
           }
@@ -111,7 +125,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataRight,
-        changeTable: change,
       };
 
     case CLICK_LEFT:
@@ -134,7 +147,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataLeft,
-        changeTable: change,
       };
     case CLICK_TOP:
       var i, x, y;
@@ -297,16 +309,24 @@ const Game = () => {
     if (state.start) {
       const tableCookieValue = readFromCookie("table");
       const resultCookieValue = readFromCookie("result");
+      const bestresultCookieValue = readFromCookie("bestResult");
       const hasCookieValue = tableCookieValue !== undefined;
+
       if (hasCookieValue) {
         console.log("쿠키있음");
-        dispatch({ type: SET_TABLEDATA, payload: tableCookieValue });
-        dispatch({ type: SET_RESULT, payload: resultCookieValue });
+        dispatch({ type: BETTER_THAN_BEST });
+        dispatch({
+          type: SET_TABLEDATA,
+          tableLoad: tableCookieValue,
+          resultLoad: resultCookieValue,
+          bestResultLoad: bestresultCookieValue,
+        });
       } else {
         console.log("쿠키없음");
         dispatch({ type: LOCATION_SELECT });
         dispatch({ type: LOCATION_SELECT });
       }
+
       //시작시 요소 두개 띄우기 위한 부분
 
       dispatch({ type: START_GAME });
@@ -316,29 +336,50 @@ const Game = () => {
       //키보드 이벤트 조작 부분
       saveToCookie("table", state.tableData);
       saveToCookie("result", state.result);
+
       if (e.key === "ArrowRight") {
         if (canMoveRight(tableDataCheck)) {
           dispatch({ type: CLICK_RIGHT });
           dispatch({ type: SUM_RIGHT });
           dispatch({ type: LOCATION_SELECT });
+          const bestresultCookieValue = readFromCookie("bestResult");
+          dispatch({
+            type: BETTER_THAN_BEST,
+            bestResultLoad: bestresultCookieValue,
+          });
         }
       } else if (e.key === "ArrowLeft") {
         if (canMoveLeft(tableDataCheck)) {
           dispatch({ type: CLICK_LEFT });
           dispatch({ type: SUM_LEFT });
           dispatch({ type: LOCATION_SELECT });
+          const bestresultCookieValue = readFromCookie("bestResult");
+          dispatch({
+            type: BETTER_THAN_BEST,
+            bestResultLoad: bestresultCookieValue,
+          });
         }
       } else if (e.key === "ArrowDown") {
         if (canMoveDown(tableDataCheck)) {
           dispatch({ type: CLICK_BOTTOM });
           dispatch({ type: SUM_DOWN });
           dispatch({ type: LOCATION_SELECT });
+          const bestresultCookieValue = readFromCookie("bestResult");
+          dispatch({
+            type: BETTER_THAN_BEST,
+            bestResultLoad: bestresultCookieValue,
+          });
         }
       } else if (e.key === "ArrowUp") {
         if (canMoveUp(tableDataCheck)) {
           dispatch({ type: CLICK_TOP });
           dispatch({ type: SUM_UP });
           dispatch({ type: LOCATION_SELECT });
+          const bestresultCookieValue = readFromCookie("bestResult");
+          dispatch({
+            type: BETTER_THAN_BEST,
+            bestResultLoad: bestresultCookieValue,
+          });
         }
       }
     };
@@ -347,11 +388,12 @@ const Game = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [state.tableData]);
+  }, [state.tableData, state.result, state.bestResult]);
 
   return (
     <>
       <div>점수 : {state.result}</div>
+      <div>최고점수 : {state.bestResult}</div>
       <Table tableData={state.tableData} />
       <ResetButton dispatch={dispatch}></ResetButton>
     </>
