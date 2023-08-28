@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import Table from "./Table";
 import cookie from "react-cookies";
+import { saveToCookie, readFromCookie } from "./Cookies";
 import {
   canMoveLeft,
   canMoveRight,
@@ -20,12 +21,6 @@ const initalState = {
     ["", "", "", ""],
   ],
 
-  tableDataTmp: [
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-  ],
   result: 0,
 };
 export const LOCATION_SELECT = "LOCATION_SELECT";
@@ -40,9 +35,14 @@ export const SUM_RIGHT = "SUM_RIGHT";
 export const SUM_UP = "SUM_UP";
 export const SUM_DOWN = "SUM_DOWN";
 export const SET_RESULT = "SET_RESULT";
+export const SET_TABLEDATA = "SET_TABLEDATA";
 const reducer = (state, action) => {
   switch (action.type) {
-    case SET_RESULT:
+    case SET_TABLEDATA:
+      return {
+        ...state,
+        tableData: action.payload,
+      };
 
     case START_GAME:
       return {
@@ -246,6 +246,8 @@ const reducer = (state, action) => {
         ...state,
         tableData: tableDataSumDown,
       };
+    default:
+      return state;
   }
 };
 const Game = () => {
@@ -254,6 +256,14 @@ const Game = () => {
 
   useEffect(() => {
     if (state.start) {
+      const cookieValue = readFromCookie("table");
+      const hasCookieValue = cookieValue !== undefined;
+      if (hasCookieValue) {
+        console.log("쿠키있음");
+        dispatch({ type: SET_TABLEDATA, payload: cookieValue });
+      } else {
+        saveToCookie("table", state.tableData);
+      }
       //시작시 요소 두개 띄우기 위한 부분
       dispatch({ type: LOCATION_SELECT });
       dispatch({ type: LOCATION_SELECT });
