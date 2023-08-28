@@ -8,22 +8,9 @@ import {
   canMoveUp,
   canMoveDown,
 } from "./utils/CanMoveCheck";
-const randomLocation = () => {
-  var x = Math.floor(Math.random() * 4);
-  var y = Math.floor(Math.random() * 4);
-  return [x, y];
-};
+import { randomLocation, randomNumber } from "./utils/CreateTile";
+import ResetButton from "./ResetButton";
 
-const randomNumber = () => {
-  var tmp = Math.floor(Math.random() * 4);
-  var num;
-  if (tmp === 1) {
-    num = 4;
-  } else {
-    num = 2;
-  }
-  return num;
-};
 const initalState = {
   start: true,
 
@@ -49,8 +36,20 @@ export const SUM_UP = "SUM_UP";
 export const SUM_DOWN = "SUM_DOWN";
 export const SET_RESULT = "SET_RESULT";
 export const SET_TABLEDATA = "SET_TABLEDATA";
+export const RESET_GAME = "RESET_GAME";
 const reducer = (state, action) => {
   switch (action.type) {
+    case RESET_GAME:
+      return {
+        ...state,
+        tableData: [
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+        ],
+        start: true,
+      };
     case SET_TABLEDATA:
       return {
         ...state,
@@ -275,6 +274,8 @@ const Game = () => {
   const [state, dispatch] = useReducer(reducer, initalState);
   const tableDataCheck = [].concat(state.tableData);
 
+  console.log(readFromCookie("table"));
+  console.log(state.tableData);
   useEffect(() => {
     if (state.start) {
       const cookieValue = readFromCookie("table");
@@ -283,16 +284,18 @@ const Game = () => {
         console.log("쿠키있음");
         dispatch({ type: SET_TABLEDATA, payload: cookieValue });
       } else {
-        saveToCookie("table", state.tableData);
+        console.log("쿠키없음");
+        dispatch({ type: LOCATION_SELECT });
+        dispatch({ type: LOCATION_SELECT });
       }
       //시작시 요소 두개 띄우기 위한 부분
-      dispatch({ type: LOCATION_SELECT });
-      dispatch({ type: LOCATION_SELECT });
+
       dispatch({ type: START_GAME });
     }
 
     const handleKeyDown = (e) => {
       //키보드 이벤트 조작 부분
+      saveToCookie("table", state.tableData);
       if (e.key === "ArrowRight") {
         if (canMoveRight(tableDataCheck)) {
           console.log("오른쪽");
@@ -333,6 +336,7 @@ const Game = () => {
   return (
     <>
       <Table tableData={state.tableData} />
+      <ResetButton dispatch={dispatch}></ResetButton>
     </>
   );
 };

@@ -1,5 +1,6 @@
 //main으로 커밋
 import Game from "./component/Game";
+import ResetButton from "./component/ResetButton";
 function App() {
   return (
     <>
