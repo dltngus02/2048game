@@ -7,22 +7,9 @@ import {
   canMoveUp,
   canMoveDown,
 } from "./utils/CanMoveCheck";
-const randomLocation = () => {
-  var x = Math.floor(Math.random() * 4);
-  var y = Math.floor(Math.random() * 4);
-  return [x, y];
-};
 
-const randomNumber = () => {
-  var tmp = Math.floor(Math.random() * 4);
-  var num;
-  if (tmp === 1) {
-    num = 4;
-  } else {
-    num = 2;
-  }
-  return num;
-};
+import { randomLocation, randomNumber } from "./utils/CreateTile";
+
 const initalState = {
   start: true,
 
@@ -32,7 +19,7 @@ const initalState = {
     ["", "", "", ""],
     ["", "", "", ""],
   ],
-  changeTable: false,
+
   tableDataTmp: [
     ["", "", "", ""],
     ["", "", "", ""],
@@ -82,10 +69,7 @@ const reducer = (state, action) => {
       };
 
     case CLICK_RIGHT:
-      var i,
-        x,
-        y,
-        change = false;
+      var i, x, y;
 
       let tableDataRight = [...state.tableData];
 
@@ -96,7 +80,6 @@ const reducer = (state, action) => {
               if (tableDataRight[y][i] == "") {
                 tableDataRight[y][i] = tableDataRight[y][x];
                 tableDataRight[y][x] = "";
-                change = true;
               }
             }
           }
@@ -106,12 +89,10 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataRight,
-        changeTable: change,
       };
 
     case CLICK_LEFT:
       var i, x, y;
-      change = false;
       const tableDataLeft = [...state.tableData];
       for (y = 0; y < 4; y++) {
         for (x = 0; x < 4; x++) {
@@ -120,7 +101,6 @@ const reducer = (state, action) => {
               if (tableDataLeft[y][i] == "") {
                 tableDataLeft[y][i] = tableDataLeft[y][x];
                 tableDataLeft[y][x] = "";
-                change = true;
               }
             }
           }
@@ -130,7 +110,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         tableData: tableDataLeft,
-        changeTable: change,
       };
     case CLICK_TOP:
       var i, x, y;
