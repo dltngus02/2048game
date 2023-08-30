@@ -1,9 +1,18 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import "./Td.css";
-const Td = ({ cellData }) => {
+import { SET_EVENTSTART } from "./Game";
+const Td = ({ cellData, startGame, dispatch }) => {
   return (
     <>
-      <td>{cellData}</td>
+      <td>
+        <div className="tableD">
+          {cellData === "" ? (
+            <div className="tableData"></div>
+          ) : (
+            <div className="haveTableData">{cellData}</div>
+          )}
+        </div>
+      </td>
     </>
   );
 };

@@ -1,0 +1,75 @@
+.Header {
+  display: flex;
+  width: 500px;
+  height: 112px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.Header h1 {
+  margin: 0px;
+  width: 194.06px;
+  height: 112px;
+  font-weight: bolder;
+  font-size: 80px;
+  color: #776e65;
+}
+
+.scores_contanier {
+  margin-left: 77.78px;
+  display: flex;
+  width: 228.16px;
+  height: 63px;
+}
+
+.score_container {
+  color: #eee4da;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 8px;
+  border-radius: 5px;
+  width: 111.58px;
+  height: 55px;
+  margin-right: 10px;
+  background-color: #bbada0;
+  margin-top: 3px;
+}
+
+.best_container {
+  color: #eee4da;
+  margin-top: 3px;
+  font-weight: bold;
+  text-align: center;
+
+  border-radius: 5px;
+  width: 111.58px;
+  height: 55px;
+  background-color: #bbada0;
+}
+
+.score {
+  height: 20px;
+
+  margin-top: 7px;
+  font-size: 15px;
+}
+
+.best {
+  height: 20px;
+
+  margin-top: 7px;
+  font-size: 15px;
+}
+
+.user_score {
+  height: 20px;
+  margin-top: -2px;
+  color: white;
+  font-size: 23px;
+}
+
+.user_best {
+  height: 20px;
+  margin-top: -2px;
+  color: white;
+  font-size: 23px;
+}

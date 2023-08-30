@@ -1,5 +1,31 @@
-td {
-  border: 1px solid black;
-  width: 40px;
-  height: 40px;
+.tableData {
+  width: 125px;
+  height: 125px;
+  background-color: #cdc1b4;
+  border-radius: 3%;
 }
+
+.haveTableData {
+  font-size: 55px;
+  font-weight: bold;
+  text-align: center;
+  color: #776e65;
+  width: 125px;
+  height: 125px;
+  padding: 15px;
+  background-color: #eee4da;
+  border-radius: 3%;
+  /* opacity: 0;
+  transform: scale(0);
+  animation: fadeInGrow 0.2s ease-out forwards; */
+}
+/* @keyframes fadeInGrow {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+} */

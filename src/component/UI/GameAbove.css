@@ -1,0 +1,36 @@
+a:link {
+  color: #776e65;
+}
+a:visited {
+  color: #776e65;
+}
+a:hover {
+  color: #776e65;
+}
+a:active {
+  color: #776e65;
+}
+
+.AboveGame {
+  width: 500px;
+  height: 45.19px;
+  color: #776e65;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+.how {
+  user-select: none;
+}
+
+.game_intro {
+  width: 213px;
+  height: 45px;
+}
+
+.reset {
+  margin-left: 159px;
+
+  width: 128px;
+  height: 45px;
+}

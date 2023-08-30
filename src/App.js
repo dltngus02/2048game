@@ -1,13 +1,14 @@
 //main으로 커밋
 import Game from "./component/Game";
+import GameIntro from "./component/UI/Header";
 import ResetButton from "./component/ResetButton";
+import "./App.css";
 function App() {
   return (
-    <>
-      <h1>2048</h1>
+    <div className="All">
       <div className="App"></div>
       <Game></Game>
-    </>
+    </div>
   );
 }
 

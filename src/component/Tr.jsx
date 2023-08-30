@@ -1,12 +1,18 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import Td from "./Td";
-const Tr = ({ rowData }) => {
+import "./Tr.css";
+const Tr = ({ rowData, startGame, dispatch }) => {
   return (
     <tr>
       {Array(rowData.length)
         .fill()
         .map((td, i) => (
-          <Td key={i} cellData={rowData[i]} />
+          <Td
+            dispatch={dispatch}
+            startGame={startGame}
+            key={i}
+            cellData={rowData[i]}
+          />
         ))}
     </tr>
   );

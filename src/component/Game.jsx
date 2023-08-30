@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import Table from "./Table";
-
+import Header from "./UI/Header";
+import GameAbove from "./UI/GameAbove";
 import { saveToCookie, readFromCookie } from "./Cookies";
 import {
   canMoveLeft,
@@ -9,11 +10,10 @@ import {
   canMoveDown,
 } from "./utils/CanMoveCheck";
 import { randomLocation, randomNumber } from "./utils/CreateTile";
-import ResetButton from "./ResetButton";
 
 const initalState = {
   start: true,
-
+  eventStart: true,
   tableData: [
     ["", "", "", ""],
     ["", "", "", ""],
@@ -35,19 +35,20 @@ export const SUM_LEFT = "SUM_LEFT";
 export const SUM_RIGHT = "SUM_RIGHT";
 export const SUM_UP = "SUM_UP";
 export const SUM_DOWN = "SUM_DOWN";
-
+export const SET_EVENTSTART = "SET_EVENTSTART";
 export const SET_TABLEDATA = "SET_TABLEDATA";
 export const RESET_GAME = "RESET_GAME";
 export const BETTER_THAN_BEST = "BETTER_THAN_BEST";
 const reducer = (state, action) => {
   switch (action.type) {
+    case SET_EVENTSTART:
+      return {
+        ...state,
+        eventStart: false,
+      };
     case BETTER_THAN_BEST:
-      console.log(action.bestResultLoad);
-      console.log(state.result);
       const betterThanBest = action.bestResultLoad < state.result;
-      console.log(action.bestResultLoad);
-      console.log(state.result);
-      console.log(betterThanBest);
+
       if (betterThanBest) {
         saveToCookie("bestResult", state.result);
         return {
@@ -313,7 +314,6 @@ const Game = () => {
       const hasCookieValue = tableCookieValue !== undefined;
 
       if (hasCookieValue) {
-        console.log("쿠키있음");
         dispatch({ type: BETTER_THAN_BEST });
         dispatch({
           type: SET_TABLEDATA,
@@ -322,14 +322,11 @@ const Game = () => {
           bestResultLoad: bestresultCookieValue,
         });
       } else {
-        console.log("쿠키없음");
         dispatch({ type: LOCATION_SELECT });
         dispatch({ type: LOCATION_SELECT });
       }
-
-      //시작시 요소 두개 띄우기 위한 부분
-
       dispatch({ type: START_GAME });
+      //시작시 요소 두개 띄우기 위한 부분
     }
 
     const handleKeyDown = (e) => {
@@ -392,10 +389,15 @@ const Game = () => {
 
   return (
     <>
-      <div>점수 : {state.result}</div>
-      <div>최고점수 : {state.bestResult}</div>
-      <Table tableData={state.tableData} />
-      <ResetButton dispatch={dispatch}></ResetButton>
+      <Header result={state.result} bestResult={state.bestResult} />
+
+      <GameAbove dispatch={dispatch}></GameAbove>
+      <Table
+        dispatch={dispatch}
+        startGame={state.eventStart}
+        tableData={state.tableData}
+      />
+      <a id="tag2"></a>
     </>
   );
 };

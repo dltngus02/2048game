@@ -1,0 +1,9 @@
+.reset_button {
+  background-color: #8f7a66;
+  color: #eee4da;
+  width: 128px;
+  height: 45px;
+  border-radius: 6px;
+  border: none;
+  font-size: 17px;
+}

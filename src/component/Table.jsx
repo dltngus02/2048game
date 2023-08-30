@@ -1,12 +1,18 @@
 import React, { useEffect, useReducer, useCallback, useState } from "react";
 import Tr from "./Tr";
-const Table = ({ tableData }) => {
+import "./Table.css";
+const Table = ({ tableData, startGame, dispatch }) => {
   return (
-    <table>
+    <table className="gameTable">
       {Array(tableData.length)
         .fill()
         .map((tr, i) => (
-          <Tr key={i} rowData={tableData[i]} />
+          <Tr
+            dispatch={dispatch}
+            startGame={startGame}
+            key={i}
+            rowData={tableData[i]}
+          />
         ))}
     </table>
   );
