@@ -5,7 +5,7 @@ export const randomLocation = () => {
 };
 
 export const randomNumber = () => {
-  var tmp = Math.floor(Math.random() * 4);
+  var tmp = Math.floor(Math.random() * 8);
   var num;
   if (tmp === 1) {
     num = 4;
