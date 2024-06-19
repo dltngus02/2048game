@@ -1,0 +1,155 @@
+
+.Header {
+  display: flex;
+  width: 500px;
+  height: 112px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.Header h1 {
+  margin: 0px;
+  width: 194.06px;
+  height: 112px;
+  font-weight: blod;
+  font-size: 80px;
+  color: #776e65;
+}
+
+.scores_container {
+  margin-left: 77.78px;
+  display: flex;
+  width: 228.16px;
+  height: 63px;
+  margin-top: 3%;
+}
+
+.score_container {
+  color: #eee4da;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  width: 111.58px;
+  height: 55px;
+  margin-right: 10px;
+  
+  background-color: #bbada0;
+}
+
+.best_container {
+  color: #eee4da;
+
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  width: 111.58px;
+  height: 55px;
+  background-color: #bbada0;
+}
+
+.score {
+  height: 20px;
+  margin-top: 7px;
+  font-size: 15px;
+  background-color: #bbada0;
+}
+
+.best {
+  height: 20px;
+  margin-top: 7px;
+  font-size: 15px;
+  background-color: #bbada0;
+}
+
+.user_score {
+  height: 20px;
+  margin-top: -2px;
+  color: white;
+  font-size: 23px;
+  background-color: #bbada0;
+}
+
+.user_best {
+  height: 20px;
+  margin-top: -2px;
+  color: white;
+  font-size: 23px;
+  background-color: #bbada0;
+}
+
+a:link {
+  color: #776e65;
+}
+a:visited {
+  color: #776e65;
+}
+a:hover {
+  color: #776e65;
+}
+a:active {
+  color: #776e65;
+}
+
+.AboveGame {
+  width: 500px;
+  height: 45.19px;
+  color: #776e65;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+.how {
+  user-select: none;
+}
+
+.game_intro {
+  width: 213px;
+  height: 45px;
+  
+}
+
+
+.reset_button {
+  margin-left: 159px;
+  background-color: #8f7a66;
+  color: #eee4da;
+  width: 128px;
+  height: 43px;
+  border-radius: 6px;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
+}
+.reset_button strong{
+  background-color: #8f7a66;
+}
+
+.gameTable {
+  width: 500px;
+  height: 500px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #bbada0;
+
+  border-radius: 1.5%;
+
+  border-collapse: separate; /* border-spacing을 사용하기 위해 collapse 대신 separate를 사용합니다 */
+  border-spacing: 15px; /* 셀 사이의 여백을 9px로 설정합니다 */
+}
+.grid-row{
+  background-color:#cdc1b4;  
+}
+
+.game-explanation{
+  line-height : 1.6;
+  font-size: 17px;
+  width: 500px;
+  height: 500px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #776e65;
+}
+hr{
+  color: #d8d4d0;
+}

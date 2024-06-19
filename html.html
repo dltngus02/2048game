@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Header.css">
+    <title>2048</title>
+    <header class="Header">
+        <h1>2048</h1>
+        <div class="scores_container">
+          <div class="score_container">
+            <div class="score">SCORE</div>
+            <div class="user_score" id="user_score">0</div>
+          </div>
+          <div class="best_container">
+            <div class="best">BEST</div>
+            <div class="user_best" id="user_best">0</div>
+          </div>
+          <script>
+            document.getElementById('user_score').textContent = '1234'; // 예시 값
+            document.getElementById('user_best').textContent = '5678'; // 예시 값
+            </script>
+        </div>
+       
+      </header>
+
+  </head>
+  <body>
+    <div class="AboveGame">
+        <div class="game_intro">
+          <div class="intro">
+            Join the tiles, get to <strong>2048!</strong>
+          </div>
+          <div class="how">
+            <a href="#tag1">
+              <strong>How to play →</strong>
+            </a>
+          </div>
+        </div>
+        <button class="reset_button">
+            <strong>New Game</strong>
+        </button>
+
+      </div> 
+    </div>  
+    <table id="gameTable" class="gameTable"></table>
+    <script src="script.js"></script>
+
+    <div class="game-explanation">
+        <p>
+            <strong>HOW TO PLAY:</strong> 
+            Use your
+            <strong>arrow keys</strong>
+            to move the tiles. Tiles<br>
+            with the same number <strong>merge into one</strong> when they touch. Add<br>
+            them up to reach <strong>2048!</strong><br>
+            <a href="#tag2"><strong>Start playing →</strong></a>
+        </p>
+        <hr />
+        <p>
+            You're playing the <strong>original version of 2048.</strong> Try out the<br>
+            official apps for <strong><a href="https://apps.apple.com/us/app/2048-by-gabriele-cirulli/id868076805">iOS</a></strong> and <a href="https://play.google.com/store/apps/details?id=com.gabrielecirulli.app2048"><strong>Android!</strong></a> All other versions of this<br>
+            game are derivatives and should be used with caution.<br>
+        </p>
+        <hr />
+        <p>
+            Created by <strong><a href="http://gabrielecirulli.com">Gabriele Cirulli</a></strong>. Based on <strong><a href="https://apps.apple.com/us/app/1024/id823499224">1024 by Veewo Studio</a></strong>.
+        </p>
+    </div>
+  </body>
+</html>
