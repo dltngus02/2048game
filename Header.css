@@ -104,7 +104,6 @@ a:active {
 .game_intro {
   width: 213px;
   height: 45px;
-  
 }
 
 
@@ -152,4 +151,9 @@ a:active {
 }
 hr{
   color: #d8d4d0;
+}
+
+.grid-cell{
+  width : 106.25px;
+  height : 106.25px;
 }
