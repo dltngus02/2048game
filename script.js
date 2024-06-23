@@ -1,4 +1,4 @@
-const tableData = [
+let tableData = [
     ["", "", "", ""],
     ["", "", "", ""],
     ["", "", "", ""],
@@ -14,7 +14,6 @@ const existLocation = (tableData) => {  //중복확인하고 나온값을 테이
     var [x,y] = randomLocation()
         while(tableData[y][x]){
             [x,y] = randomLocation();
-            break
         }
         tableData[y][x] = randomNumber();
         return [x,y];
@@ -95,6 +94,64 @@ const canMoveDown = (tableData) => {
     return false;
   };
 
+const resetConfirm = (tableData) => {
+    var confirmflag = confirm("Are you sure you want to start a new game? All progress will be lost.");
+    if(confirmflag){
+        resetGame(tableData)
+  }
+}
+const resetGame = (tableData) => { //resetbutton 눌렀을 시 동작하는 함수
+    for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+            tableData[y][x] = "";
+        }
+    }
+    existLocation(tableData)
+    existLocation(tableData)
+    renderTable(tableData)
+
+}
+const renderTable = (data) => {//gametable을 다시 그려주는 함수
+    const table = document.getElementById('gameTable');
+    table.innerHTML = '';
+    data.forEach(rowData => {
+        const tr = createTr(rowData);
+        table.appendChild(tr);
+    });
+};
+
+function createTd(cellData) { //칸을 그려주는 함수 
+    const td = document.createElement('td');
+    const div = document.createElement('div');
+    div.className = 'grid-cell';
+    div.textContent = cellData;
+    td.appendChild(div);
+    return td;
+}
+
+
+function createTr(rowData) {//쥴을 그려주는 함수 
+    const tr = document.createElement('tr');
+    tr.className = 'grid-row';
+    rowData.forEach(cellData => {
+        const td = createTd(cellData);
+        tr.appendChild(td);
+    });
+    return tr;
+}
+
+
+function createTable(data) {
+    const table = document.getElementById('gameTable');
+    existLocation(tableData)
+    existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
+    data.forEach(rowData => {
+        const tr = createTr(rowData);
+        table.appendChild(tr);
+    });
+}
+
+
 function getCookie(name) { 
     let matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -130,36 +187,11 @@ function setCookie(name, value, options = {}) {
 
 
 
-function createTd(cellData) {
-    const td = document.createElement('td');
-    const div = document.createElement('div');
-    div.className = 'grid-cell';
-    div.textContent = cellData;
-    td.appendChild(div);
-    return td;
-}
-
-
-function createTr(rowData) {
-    const tr = document.createElement('tr');
-    tr.className = 'grid-row';
-    rowData.forEach(cellData => {
-        const td = createTd(cellData);
-        tr.appendChild(td);
+document.addEventListener('DOMContentLoaded', (event) => { //클릭 이벤트 발생시 동작
+    document.getElementById('resetButton').addEventListener('click', function() {
+        resetConfirm(tableData);
     });
-    return tr;
-}
-
-
-function createTable(data) {
-    const table = document.getElementById('gameTable');
-    existLocation(tableData)
-    existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
-    data.forEach(rowData => {
-        const tr = createTr(rowData);
-        table.appendChild(tr);
-    });
-}
+});
 
 
 createTable(tableData);
