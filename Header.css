@@ -156,4 +156,10 @@ hr{
 .grid-cell{
   width : 106.25px;
   height : 106.25px;
+  font-size: 53px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  color: #776e65;
+  line-height: 106.25px; /* 행의 높이와 동일하게 맞추기 */
 }
