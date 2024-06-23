@@ -1,9 +1,9 @@
 
 const tableData = [
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""]
+    ["2", "1233", "5411", "4536"],
+    ["4", "612", "874", "4"],
+    ["5", "654", "45", "4556"],
+    ["16", "32", "64", "456"]
 ];
 let score = 0
 let best = 0
@@ -204,8 +204,8 @@ const createTr = (rowData) => {//쥴을 그려주는 함수
 
 const createTable = (data) => {
     const table = document.getElementById('gameTable');
-    existLocation(tableData)
-    existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
+    // existLocation(tableData)
+    // existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
     data.forEach(rowData => {
         const tr = createTr(rowData);
         table.appendChild(tr);
@@ -319,9 +319,43 @@ const gameWin = () => {
     div.style.backgroundColor = 'rgba(237, 194, 46, 0.5)'
 }
 
+const gameOver = () => {
+    if (!canMoveUp(tableData) && !canMoveDown(tableData) && !canMoveRight(tableData) && !canMoveLeft(tableData)) {
+        console.log("game over");
+        const gameContainer = document.getElementById('gameContainer');
+        const gameOverMessage = document.getElementById('gameOverMessage');
+
+        gameContainer.style.backgroundColor = 'rgba(238, 228, 218, 0.73)'; // gameContainer 색상 변경
+
+        if (!gameOverMessage) {
+            createGameOverMessage(gameContainer); // gameOverMessage가 없으면 생성
+        } else {
+            gameOverMessage.style.display = 'block'; // gameOverMessage가 있으면 보이게 설정
+        }
+    } else {
+        hideGameOverMessage(); // 게임이 진행 중이면 gameOverMessage를 숨김
+    }
+}
+
+const createGameOverMessage = (parentElement) => {
+    const gameOverMessage = document.createElement('div');
+    gameOverMessage.id = 'gameOverMessage';
+    gameOverMessage.className = 'game-over-message';
+    gameOverMessage.innerText = 'Game Over!';
+    parentElement.appendChild(gameOverMessage);
+}
+
+const hideGameOverMessage = () => {
+    const gameOverMessage = document.getElementById('gameOverMessage');
+    if (gameOverMessage) {
+        gameOverMessage.style.display = 'none'; // gameOverMessage 숨김
+    }
+}
+
 document.addEventListener('DOMContentLoaded', (event) => { //클릭 이벤트 발생시 동작
     document.getElementById('resetButton').addEventListener('click', function() {
         resetConfirm(tableData);
+        hideGameOverMessage(); 
     });
 });
 
@@ -332,6 +366,7 @@ window.addEventListener("keydown", (e) => {
         document.getElementById('user_score').textContent = score
         bestCal()
         document.getElementById('user_best').textContent = best
+        gameOver()
     }
     else if(e.key=="ArrowLeft" || e.key=="a"){
         e.preventDefault();
@@ -339,6 +374,7 @@ window.addEventListener("keydown", (e) => {
         document.getElementById('user_score').textContent = score
 
         bestCal()
+        gameOver()
         document.getElementById('user_best').textContent = best
     }
     else if(e.key=="ArrowDown" || e.key=="s"){
@@ -347,6 +383,7 @@ window.addEventListener("keydown", (e) => {
         document.getElementById('user_score').textContent = score
 
         bestCal()
+        gameOver()
         document.getElementById('user_best').textContent = best
     }
     else if(e.key=="ArrowUp" || e.key=="w"){
@@ -355,6 +392,7 @@ window.addEventListener("keydown", (e) => {
         document.getElementById('user_score').textContent = score
 
         bestCal()
+        gameOver()
         document.getElementById('user_best').textContent = best
     }
     
