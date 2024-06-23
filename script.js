@@ -204,8 +204,8 @@ const createTr = (rowData) => {//쥴을 그려주는 함수
 
 const createTable = (data) => {
     const table = document.getElementById('gameTable');
-    // existLocation(tableData)
-    // existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
+    existLocation(tableData)
+    existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
     data.forEach(rowData => {
         const tr = createTr(rowData);
         table.appendChild(tr);
