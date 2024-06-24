@@ -134,7 +134,9 @@ const createTd = (cellData)  => { //칸을 그려주는 함수
     if(cellData>=8){
         div.style.color = 'white';
     }
-
+    if (cellData === 0) {
+        div.style.display = 'none';
+    }
     if (cellData < 10) {
         div.style.fontSize = '55px'; // 예시: 길이가 1일 때
     } else if (cellData < 100) {
@@ -146,7 +148,6 @@ const createTd = (cellData)  => { //칸을 그려주는 함수
     } else if(cellData < 100000){
         div.style.fontSize = '43px';
     }
-
 
     if (cellData === 2) {
         div.style.backgroundColor = '#eee4da';
@@ -164,7 +165,6 @@ const createTd = (cellData)  => { //칸을 그려주는 함수
     }
     else if(cellData == 64) {
         div.style.backgroundColor = '#f75f3b';
-
     }
     else if(cellData == 128) {
         div.style.backgroundColor = '#edd073';
@@ -186,7 +186,6 @@ const createTd = (cellData)  => { //칸을 그려주는 함수
         div.style.backgroundColor = 'edc22e';
         div.style.boxShadow = '0 0 30px 10px rgba(243, 215, 116, 0.5555555556), inset 0 0 0 1px rgba(255, 255, 255, 0.3333333333)';
     }
-
     td.appendChild(div);
     return td;
 }
