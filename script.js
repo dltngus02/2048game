@@ -98,7 +98,7 @@ const randomNumber = () => { //0.125퍼의 확률로 4뽑는 함수
   };
 
 
-const resetConfirm = (tableData) => {
+const resetConfirm = (tableData) => { //리셋 확인창 띄워주는 함수 
     var confirmflag = confirm("Are you sure you want to start a new game? All progress will be lost.");
     if(confirmflag){
         score = 0
@@ -213,12 +213,12 @@ const createTable = (data) => {
 
 
 
-const clickLeft = (tableData) => {
+const clickLeft = (tableData) => { //왼쪽으로 당기는 함수
     if(canMoveLeft(tableData)){
         for(let y = 0; y<4; y++){ //빈칸 있으면 당기는 용도
             let newRow = tableData[y].filter(value => value); 
             for (let x = 0; x < newRow.length - 1; x++) { // 타일 합치기 
-                if (newRow[x] === newRow[x + 1]) {
+                if (newRow[x] === newRow[x + 1]) { //같으면 합쳐주고 하나 지우고 뒤에 "" 하나 넣어줌
                     score += (newRow[x] * 2)
                     newRow[x] *= 2;
                     newRow.splice(x + 1, 1);
@@ -232,7 +232,7 @@ const clickLeft = (tableData) => {
     }
 }
 
-const clickRight = (tableData) => {
+const clickRight = (tableData) => { //오른쪽으로 당기는 함수 
     if(canMoveRight(tableData)){
         for(let y = 0; y<4; y++){
             let newRow = tableData[y].filter(value => value); 
@@ -251,7 +251,7 @@ const clickRight = (tableData) => {
     }
 }
 
-const clickDown = (tableData) => {
+const clickDown = (tableData) => { // 아래로 당기는 함수 
     if(canMoveDown(tableData)){
         for (let x = 0; x < 4; x++) {
             let column = [];
@@ -279,7 +279,7 @@ const clickDown = (tableData) => {
     }
 }
 
-const clickUp = (tableData) => {
+const clickUp = (tableData) => { // 위로 당기는 함수
     changeCheck = [false,false,false,false]
     if(canMoveUp(tableData)){
         for(let x = 0; x<4; x++){
@@ -307,7 +307,7 @@ const clickUp = (tableData) => {
     }
 }
 
-const bestCal = () => {
+const bestCal = () => { // best 점수 업데이트  
     if(score>=best){
         best = score;
     }
@@ -318,7 +318,7 @@ const gameWin = () => {
     div.style.backgroundColor = 'rgba(237, 194, 46, 0.5)'
 }
 
-const gameOver = () => {
+const gameOver = () => { //게임 오버 창 띄우기
     if (!canMoveUp(tableData) && !canMoveDown(tableData) && !canMoveRight(tableData) && !canMoveLeft(tableData)) {
         console.log("game over");
         const gameContainer = document.getElementById('gameContainer');
@@ -336,7 +336,7 @@ const gameOver = () => {
     }
 }
 
-const createGameOverMessage = (parentElement) => {
+const createGameOverMessage = (parentElement) => { //gameover 창 띄우기 
     const gameOverMessage = document.createElement('div');
     gameOverMessage.id = 'gameOverMessage';
     gameOverMessage.className = 'game-over-message';
@@ -344,7 +344,7 @@ const createGameOverMessage = (parentElement) => {
     parentElement.appendChild(gameOverMessage);
 }
 
-const hideGameOverMessage = () => {
+const hideGameOverMessage = () => { // 게임오버 창 숨기기 
     const gameOverMessage = document.getElementById('gameOverMessage');
     if (gameOverMessage) {
         gameOverMessage.style.display = 'none'; // gameOverMessage 숨김
@@ -352,7 +352,7 @@ const hideGameOverMessage = () => {
 }
 
 
-const main = () => {
+const main = () => { // 이벤트 감지 
     document.addEventListener('DOMContentLoaded', (event) => { //클릭 이벤트 발생시 동작
         document.getElementById('resetButton').addEventListener('click', function() {
             resetConfirm(tableData);
@@ -401,7 +401,7 @@ const main = () => {
     
     
     
-    createTable(tableData);
+    createTable(tableData); 
 }
 
 main()
