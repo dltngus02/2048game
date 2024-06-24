@@ -351,52 +351,57 @@ const hideGameOverMessage = () => {
     }
 }
 
-document.addEventListener('DOMContentLoaded', (event) => { //클릭 이벤트 발생시 동작
-    document.getElementById('resetButton').addEventListener('click', function() {
-        resetConfirm(tableData);
-        hideGameOverMessage(); 
+
+const main = () => {
+    document.addEventListener('DOMContentLoaded', (event) => { //클릭 이벤트 발생시 동작
+        document.getElementById('resetButton').addEventListener('click', function() {
+            resetConfirm(tableData);
+            hideGameOverMessage(); 
+        });
     });
-});
-
-window.addEventListener("keydown", (e) => {
-    if (e.key==="ArrowRight" || e.key=="d"){
-        e.preventDefault();
-        clickRight(tableData);
-        document.getElementById('user_score').textContent = score
-        bestCal()
-        document.getElementById('user_best').textContent = best
-        gameOver()
-    }
-    else if(e.key=="ArrowLeft" || e.key=="a"){
-        e.preventDefault();
-        clickLeft(tableData);
-        document.getElementById('user_score').textContent = score
-
-        bestCal()
-        gameOver()
-        document.getElementById('user_best').textContent = best
-    }
-    else if(e.key=="ArrowDown" || e.key=="s"){
-        e.preventDefault();
-        clickDown(tableData);
-        document.getElementById('user_score').textContent = score
-
-        bestCal()
-        gameOver()
-        document.getElementById('user_best').textContent = best
-    }
-    else if(e.key=="ArrowUp" || e.key=="w"){
-        e.preventDefault();
-        clickUp(tableData);
-        document.getElementById('user_score').textContent = score
-
-        bestCal()
-        gameOver()
-        document.getElementById('user_best').textContent = best
-    }
     
-  });
+    window.addEventListener("keydown", (e) => {
+        if (e.key==="ArrowRight" || e.key=="d"){
+            e.preventDefault();
+            clickRight(tableData);
+            document.getElementById('user_score').textContent = score
+            bestCal()
+            document.getElementById('user_best').textContent = best
+            gameOver()
+        }
+        else if(e.key=="ArrowLeft" || e.key=="a"){
+            e.preventDefault();
+            clickLeft(tableData);
+            document.getElementById('user_score').textContent = score
+    
+            bestCal()
+            gameOver()
+            document.getElementById('user_best').textContent = best
+        }
+        else if(e.key=="ArrowDown" || e.key=="s"){
+            e.preventDefault();
+            clickDown(tableData);
+            document.getElementById('user_score').textContent = score
+    
+            bestCal()
+            gameOver()
+            document.getElementById('user_best').textContent = best
+        }
+        else if(e.key=="ArrowUp" || e.key=="w"){
+            e.preventDefault();
+            clickUp(tableData);
+            document.getElementById('user_score').textContent = score
+    
+            bestCal()
+            gameOver()
+            document.getElementById('user_best').textContent = best
+        }
+        
+      });
+    
+    
+    
+    createTable(tableData);
+}
 
-
-
-createTable(tableData);
+main()
