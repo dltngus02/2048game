@@ -90,8 +90,45 @@ const existLocation = (tableData) => {  //중복확인하고 나온값을 테이
             [x,y] = randomLocation();
         }
         tableData[y][x] = randomNumber();
+        
         return [x,y];
     }
+
+const addAnimationToNewCell = (location) => {
+    const [x, y] = location;
+    const table = document.getElementById('gameTable');
+    const row = table.rows[y];
+    if (row) {
+        const cell = row.cells[x];
+        if (cell) {
+            const div = cell.firstChild;
+            if (div) {
+                div.classList.add('grow');
+                setTimeout(() => {
+                    div.classList.remove('grow');
+                }, 1000); // 애니메이션 지속 시간 (예: 0.5초)
+            }
+        }
+    }
+};    
+
+// const addAnimationToMoveLeft = (location) => {
+//     const [x, y] = location;
+//     const table = document.getElementById('gameTable');
+//     const row = table.rows[y];
+//     if (row) {
+//         const cell = row.cells[x];
+//         if (cell) {
+//             const div = cell.firstChild;
+//             if (div) {
+//                 div.classList.add('move-left');
+//                 setTimeout(() => {
+//                     div.classList.remove('move-left');
+//                 }, 1000); // 애니메이션 지속 시간 (예: 0.5초)
+//             }
+//         }
+//     }
+// };    
 
 const randomNumber = () => { //0.125퍼의 확률로 4뽑는 함수 
     return (Math.floor(Math.random() * 8) ===1) ? 4 : 2
@@ -112,9 +149,11 @@ const resetGame = (tableData) => { //resetbutton 눌렀을 시 동작하는 함�
             tableData[y][x] = "";
         }
     }
-    existLocation(tableData)
-    existLocation(tableData)
+    const firstLocation = existLocation(tableData)
+    const secondLocation =  existLocation(tableData)
     renderTable(tableData)
+    addAnimationToNewCell(firstLocation)
+    addAnimationToNewCell(secondLocation)
 
 }
 const renderTable = (tableData) => {//gametable을 다시 그려주는 함수
@@ -203,12 +242,14 @@ const createTr = (rowData) => {//쥴을 그려주는 함수
 
 const createTable = (data) => {
     const table = document.getElementById('gameTable');
-    existLocation(tableData)
-    existLocation(tableData) //보통 게임 시작할 때 두개씩 나오드라..
+    const firstLocation = existLocation(data);
+    const secondLocation = existLocation(data);
     data.forEach(rowData => {
         const tr = createTr(rowData);
         table.appendChild(tr);
     });
+    addAnimationToNewCell(firstLocation);
+    addAnimationToNewCell(secondLocation);
 }
 
 
@@ -227,8 +268,9 @@ const clickLeft = (tableData) => { //왼쪽으로 당기는 함수
             }
             tableData[y] = newRow.concat(new Array(4 - newRow.length).fill("")); //빈칸만큼 빈 배열 넣어주고 tableDateY 값에 넣어주기
         }
-        existLocation(tableData)
+        const cellData = existLocation(tableData)
         renderTable(tableData)
+        addAnimationToNewCell(cellData)
     }
 }
 
@@ -246,8 +288,9 @@ const clickRight = (tableData) => { //오른쪽으로 당기는 함수
             }
             tableData[y] = new Array(4 - newRow.length).fill("").concat(newRow); //빈칸만큼 빈 배열 넣어주고 tableDateY 값에 넣어주기
         }
-        existLocation(tableData)
+        const cellData = existLocation(tableData)
         renderTable(tableData)
+        addAnimationToNewCell(cellData)
     }
 }
 
@@ -274,8 +317,9 @@ const clickDown = (tableData) => { // 아래로 당기는 함수
             }
             
         }
-        existLocation(tableData)
+        const cellData = existLocation(tableData)
         renderTable(tableData)
+        addAnimationToNewCell(cellData)
     }
 }
 
@@ -302,8 +346,9 @@ const clickUp = (tableData) => { // 위로 당기는 함수
                 tableData[y][x] = column[y]; 
             }          
         }
-        existLocation(tableData)
+        const cellData = existLocation(tableData)
         renderTable(tableData)
+        addAnimationToNewCell(cellData)
     }
 }
 
