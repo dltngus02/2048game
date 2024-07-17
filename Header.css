@@ -217,7 +217,7 @@ hr{
   animation-play-state: running;
   animation-timing-function: ease;
 }
-
+/* 
 @keyframes move-left {
   0% {
       transform: translateX(0);
@@ -228,4 +228,4 @@ hr{
 }
 .move-left {
   animation: move-left 5s ease;
-}
+} */
